@@ -2,7 +2,11 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
 
-export const useChatStore = create((set, get) => ({
+export const useChatStore = create((set, get) => {
+  // placeholder for a socket connection or subscription reference
+  let messageSocket = null;
+
+  return ({
   messages: [],
   users: [],
   selectedUser: null,
@@ -49,8 +53,23 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
+  // Safe no-op subscription functions for real-time messages.
+  // Replace these with actual socket logic when integrating realtime.
+  subscribeToMessages: () => {
+    // example: messageSocket = io.connect(...); messageSocket.on('newMessage', ...)
+    return;
+  },
+
+  unsubscribeFromMessages: () => {
+    if (messageSocket && typeof messageSocket.disconnect === "function") {
+      messageSocket.disconnect();
+    }
+    messageSocket = null;
+  },
+
   setSelectedUser: (selectedUser) => set({ selectedUser }),
-}));
+  });
+});
 
 
 
